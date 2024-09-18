@@ -14,7 +14,7 @@ class _SplashscreenState extends State<Splashscreen> {
     super.initState();
 
     // Navigate to the login page after a delay
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, '/login');
     });
   }
@@ -30,7 +30,7 @@ class _SplashscreenState extends State<Splashscreen> {
         width: screenWidth,
         height: screenHeight,
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(color: Color(0xFF583EF2)),
+        decoration: const BoxDecoration(color: Color(0xFF583EF2)),
         child: Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -39,7 +39,7 @@ class _SplashscreenState extends State<Splashscreen> {
               Container(
                 width: screenWidth * 0.2,
                 height: screenWidth * 0.2,
-                decoration: ShapeDecoration(
+                decoration: const ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -55,7 +55,7 @@ class _SplashscreenState extends State<Splashscreen> {
                     width: screenWidth * 0.12,
                     height: screenWidth * 0.12,
                     clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(),
+                    decoration: const BoxDecoration(),
                     child: SvgPicture.asset(
                       'public/images/icon-32-x-clean.svg', // Path to your SVG file
                       fit: BoxFit.contain, // Adjust fit as needed

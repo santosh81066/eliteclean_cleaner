@@ -2,15 +2,19 @@ import 'package:eliteclean_cleaner/screens/cleaner_registration.dart';
 import 'package:eliteclean_cleaner/screens/loginpage.dart';
 
 import 'package:eliteclean_cleaner/screens/otpverify.dart';
+import 'package:eliteclean_cleaner/screens/payment_info.dart';
 import 'package:eliteclean_cleaner/screens/slashscreen.dart';
+import 'package:eliteclean_cleaner/screens/userprofile.dart';
 import 'package:flutter/material.dart';
 // Import your LoginPage widget
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,11 +27,13 @@ class MyApp extends StatelessWidget {
       // Define the initial route and the routes in the app
       initialRoute: '/',
       routes: {
-        '/': (context) => Splashscreen(), // Splashscreen as the initial screen
-        '/login': (context) => Login(),
-        '/verify': (context) => Verify(),
-        '/register': (context) =>
-            CleanerRegistration(), // otp route// otp route
+        '/': (context) =>
+            const Splashscreen(), // Splashscreen as the initial screen
+        '/login': (context) => const Login(),
+        '/verify': (context) => const Verify(),
+        '/register': (context) => const CleanerRegistration(),
+        '/userprofile': (context) => const UserProfile(),
+        '/paymentinfo': (context) => PaymentInfo(),
       },
     );
   }

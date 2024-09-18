@@ -19,7 +19,7 @@ class Verify extends StatelessWidget {
             ),
 
             // Title
-            Text(
+            const Text(
               'Verify',
               style: TextStyle(
                 fontSize: 22,
@@ -29,11 +29,11 @@ class Verify extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             // Subtitle
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.0),
               child: Text(
                 'Please enter the verification code sent to your phone number',
                 textAlign: TextAlign.center,
@@ -44,20 +44,20 @@ class Verify extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // OTP and Confirm Button Section in a bordered container
             Container(
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.symmetric(horizontal: 32.0),
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFFEAE9FF), width: 1),
+                border: Border.all(color: const Color(0xFFEAE9FF), width: 1),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Column(
                 children: [
                   // "Your code" label
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Your code',
@@ -69,7 +69,7 @@ class Verify extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // OTP input fields (Underline only)
                   Row(
@@ -82,7 +82,7 @@ class Verify extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Resend code and expiration text
                   Row(
@@ -92,7 +92,7 @@ class Verify extends StatelessWidget {
                         onTap: () {
                           // Resend code functionality
                         },
-                        child: Text(
+                        child: const Text(
                           'Resend code',
                           style: TextStyle(
                             fontSize: 12,
@@ -101,7 +101,7 @@ class Verify extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Expired after 23s',
                         style: TextStyle(
                           fontSize: 11,
@@ -111,7 +111,7 @@ class Verify extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Confirm button (full-width)
                   SizedBox(
@@ -122,14 +122,14 @@ class Verify extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            Color(0xFF583EF2), // Button background color
-                        padding: EdgeInsets.symmetric(
+                            const Color(0xFF583EF2), // Button background color
+                        padding: const EdgeInsets.symmetric(
                             vertical: 14), // Full-width button
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Confirm',
                         style: TextStyle(
                           fontSize: 14,
@@ -150,7 +150,7 @@ class Verify extends StatelessWidget {
 
   // Widget for each input field of the verification code with only underline
   Widget _buildUnderlineCodeField() {
-    return SizedBox(
+    return const SizedBox(
       width: 60,
       child: TextField(
         keyboardType: TextInputType.number,

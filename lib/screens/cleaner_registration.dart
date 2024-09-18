@@ -7,7 +7,6 @@ class CleanerRegistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -24,10 +23,10 @@ class CleanerRegistration extends StatelessWidget {
                 fit: BoxFit.contain, // Adjust fit as needed
               ),
 
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // "Sign up" text
-              Text(
+              const Text(
                 'Registraion',
                 style: TextStyle(
                   fontSize: 24,
@@ -35,11 +34,11 @@ class CleanerRegistration extends StatelessWidget {
                   color: Color(0xFF1E116B),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               // Subtext
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
                   'Please enter your details to sign up and create an account.',
                   textAlign: TextAlign.center,
@@ -49,7 +48,7 @@ class CleanerRegistration extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // Form container (expanded towards the bottom)
               Container(
@@ -59,14 +58,14 @@ class CleanerRegistration extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Color(0xFFEAE9FF)),
+                  border: Border.all(color: const Color(0xFFEAE9FF)),
                 ),
                 child: Column(
                   // Align the button at the bottom
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Form fields
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Your name" label and input field
@@ -100,10 +99,10 @@ class CleanerRegistration extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Your name" label and input field
@@ -137,10 +136,10 @@ class CleanerRegistration extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Your name" label and input field
@@ -174,10 +173,10 @@ class CleanerRegistration extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Your name" label and input field
@@ -212,7 +211,7 @@ class CleanerRegistration extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     // "Next" button aligned at the bottom and full width
@@ -221,16 +220,16 @@ class CleanerRegistration extends StatelessWidget {
                           double.infinity, // Makes the button take full width
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/verify');
+                          Navigator.pushNamed(context, '/userprofile');
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: Color(0xFF583EF2),
+                          backgroundColor: const Color(0xFF583EF2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Next',
                           style: TextStyle(
                             fontSize: 16,
