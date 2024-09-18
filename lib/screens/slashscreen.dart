@@ -57,7 +57,7 @@ class _SplashscreenState extends State<Splashscreen> {
                     clipBehavior: Clip.antiAlias,
                     decoration: const BoxDecoration(),
                     child: SvgPicture.asset(
-                      'public/images/icon-32-x-clean.svg', // Path to your SVG file
+                      'assets/images/icon-32-x-clean.svg', // Path to your SVG file
                       fit: BoxFit.contain, // Adjust fit as needed
                     ), // Replace this with your custom icon
                   ),

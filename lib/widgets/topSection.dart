@@ -145,7 +145,8 @@ class TopSection extends StatelessWidget {
                   Container(
                     width: 30,
                     height: 5, // Increased thickness
-                    color: Colors.white, // White color for the line
+                    color: Colors.white,
+                    // White color for the line
                   ),
                 ],
               ),

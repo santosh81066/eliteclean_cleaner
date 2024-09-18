@@ -92,7 +92,12 @@ class _UserProfileState extends State<UserProfile> {
                         bottomLeft: Radius.circular(64),
                         bottomRight: Radius.circular(64),
                       ),
-                      color: Colors.grey[200],
+                      color: const Color(0xffffffff),
+                      border: Border.all(
+                        style: BorderStyle.solid,
+                        color: Color(0xffEAEAFF),
+                        width: 1.5,
+                      ),
                       image: _frontImage != null
                           ? DecorationImage(
                               image: FileImage(_frontImage!),
@@ -126,7 +131,12 @@ class _UserProfileState extends State<UserProfile> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: const Color(0xffffffff),
+                      border: Border.all(
+                        style: BorderStyle.solid,
+                        color: Color(0xffEAEAFF),
+                        width: 1.5,
+                      ),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(4),
                         topRight: Radius.circular(64),
@@ -153,7 +163,7 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           const SizedBox(
-            height: 140,
+            height: 125,
           ),
           Center(
             child: SizedBox(
