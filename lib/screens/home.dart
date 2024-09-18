@@ -26,40 +26,34 @@ class _HomeState extends State<Home> {
       // Home Page
       const Home(),
 
-      const Column(
-        children: [
-          Text(
-            'Bookings Page',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+      const Center(
+        child: Text(
+          'Bookings Page',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
       ),
       // Settings Page
-      const Column(
-        children: [
-          Text(
-            'Settings Page',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+      const Center(
+        child: Text(
+          'Settings Page',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
       ),
       // Notifications Page
-      const Column(
-        children: [
-          Text(
-            'Notifications Page',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+      const Center(
+        child: Text(
+          'Notifications Page',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
       ),
     ];
 

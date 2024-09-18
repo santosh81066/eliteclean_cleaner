@@ -6,8 +6,6 @@ class CleanerRegistration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -15,7 +13,8 @@ class CleanerRegistration extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                  height: screenHeight * 0.1), // Space from top to the logo
+                  height: MediaQuery.of(context).size.height *
+                      0.1), // Space from top to the logo
 
               // Logo at the top
               SvgPicture.asset(
@@ -27,7 +26,7 @@ class CleanerRegistration extends StatelessWidget {
 
               // "Sign up" text
               const Text(
-                'Registraion',
+                'Registration',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -51,197 +50,63 @@ class CleanerRegistration extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Form container (expanded towards the bottom)
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
-                  height: screenHeight * 0.60, // Adjust height of the container
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: const Color(0xFFEAE9FF)),
+              Container(
+                padding: const EdgeInsets.all(24),
+                margin: const EdgeInsets.symmetric(horizontal: 32),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(color: const Color(0xFFEAE9FF)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Form fields
+                    _buildTextField(
+                        label: 'Country name',
+                        hintText: 'your country name here',
+                        icon: Icons.language),
+                    const SizedBox(height: 20),
+                    _buildTextField(
+                        label: 'State',
+                        hintText: 'your state here',
+                        icon: Icons.map),
+                    const SizedBox(height: 20),
+                    _buildTextField(
+                        label: 'City',
+                        hintText: 'your city here',
+                        icon: Icons.location_city),
+                    const SizedBox(height: 20),
+                    _buildTextField(
+                        label: 'Address',
+                        hintText: 'your address here',
+                        icon: Icons.location_on_outlined),
+                    const SizedBox(height: 5),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                  height: 20), // Extra space between container and button
+              // "Next" button aligned at the bottom and full width
+              SizedBox(
+                width: 320, // Makes the button take full width
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/userprofile');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: const Color(0xFF583EF2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
-                  child: Column(
-                    // Align the button at the bottom
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Form fields
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // "Your name" label and input field
-                          // "Phone number" label and input field
-                          Text(
-                            'Country name',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1F39),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.language, color: Color(0xFFB8B8D2)),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.name,
-                                  decoration: InputDecoration(
-                                    hintText: 'your country name here',
-                                    border: InputBorder.none,
-                                    hintStyle:
-                                        TextStyle(color: Color(0xFFB8B8D2)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // "Your name" label and input field
-                          // "Phone number" label and input field
-                          Text(
-                            'State',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1F39),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.map, color: Color(0xFFB8B8D2)),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    hintText: 'your state here',
-                                    border: InputBorder.none,
-                                    hintStyle:
-                                        TextStyle(color: Color(0xFFB8B8D2)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // "Your name" label and input field
-                          // "Phone number" label and input field
-                          Text(
-                            'City',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1F39),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.location_city,
-                                  color: Color(0xFFB8B8D2)),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.name,
-                                  decoration: InputDecoration(
-                                    hintText: 'your city here',
-                                    border: InputBorder.none,
-                                    hintStyle:
-                                        TextStyle(color: Color(0xFFB8B8D2)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // "Your name" label and input field
-                          // "Phone number" label and input field
-                          Text(
-                            'Address',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1F39),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.location_on_outlined,
-                                  color: Color(0xFFB8B8D2)),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    hintText: 'your address here',
-                                    border: InputBorder.none,
-                                    hintStyle:
-                                        TextStyle(color: Color(0xFFB8B8D2)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      // "Next" button aligned at the bottom and full width
-                      SizedBox(
-                        width:
-                            double.infinity, // Makes the button take full width
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/userprofile');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: const Color(0xFF583EF2),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ),
-                          child: const Text(
-                            'Next',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white, // Set text color to white
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white, // Set text color to white
+                    ),
                   ),
                 ),
               ),
@@ -249,6 +114,43 @@ class CleanerRegistration extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(
+      {required String label,
+      required String hintText,
+      required IconData icon}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F1F39),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Icon(icon, color: const Color(0xFFB8B8D2)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TextField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  border: InputBorder.none,
+                  hintStyle: const TextStyle(color: Color(0xFFB8B8D2)),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const Divider(),
+      ],
     );
   }
 }
