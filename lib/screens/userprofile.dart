@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import '../widgets/topSection.dart';
+import '../widgets/topSectionProfile.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -48,7 +48,8 @@ class _UserProfileState extends State<UserProfile> {
         crossAxisAlignment:
             CrossAxisAlignment.start, // Ensures column content is aligned left
         children: [
-          TopSection(screenWidth: screenWidth, screenHeight: screenHeight),
+          TopSectionProfile(
+              screenWidth: screenWidth, screenHeight: screenHeight),
 
           // Main content section (Your Packages and Services)
           Padding(

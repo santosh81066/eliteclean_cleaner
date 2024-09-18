@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class PaymentInfo extends StatelessWidget {
+  const PaymentInfo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Confirm Bookings",
+        title: const Text(
+          "Payment Information",
           style: TextStyle(
             fontSize: 16,
             color: Color(0xff1F126B),
@@ -18,23 +22,11 @@ class PaymentInfo extends StatelessWidget {
         padding: const EdgeInsets.all(32.0),
         child: Column(
           children: [
-            // Header (Time and Status)
-
-            SizedBox(height: 16),
-
-            // Payment method selection
+            const SizedBox(height: 16),
             _buildPaymentMethodSection(),
-
-            SizedBox(height: 16),
-
-            // Card details form
+            const SizedBox(height: 16),
             _buildCardDetailsSection(),
-
-            Spacer(),
-
-            // Save card info toggle
-
-            // Footer (Next button)
+            const Spacer(),
             _buildFooterButton(context),
           ],
         ),
@@ -46,26 +38,26 @@ class PaymentInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Choose a payment method',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         RadioListTile(
           value: 'Credit card',
           groupValue: 'Credit card',
-          title: Text('Credit card'),
+          title: const Text('Credit card'),
           onChanged: (value) {},
         ),
         RadioListTile(
           value: 'Paypal',
           groupValue: null,
-          title: Text('Paypal'),
+          title: const Text('Paypal'),
           onChanged: (value) {},
         ),
         RadioListTile(
           value: 'Cash',
           groupValue: null,
-          title: Text('Cash'),
+          title: const Text('Cash'),
           onChanged: (value) {},
         ),
       ],
@@ -76,10 +68,10 @@ class PaymentInfo extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color(0x33000000),
+          color: const Color(0x33000000),
           width: 0.5,
         ),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(2.0),
           topRight: Radius.circular(25.0),
           bottomLeft: Radius.circular(25.0),
@@ -92,25 +84,21 @@ class PaymentInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SwitchListTile(
-              activeColor: Color(0xff583EF2),
-              inactiveThumbColor: Color(0xff583EF2),
-              value: false,
+              activeTrackColor: const Color(0xff583EF2),
+              inactiveThumbColor: const Color(0xff000000),
+              value: true,
               onChanged: (bool value) {},
-              title: Text('Save card information'),
+              title: const Text('Save card information'),
             ),
             _buildTextField(label: 'Card holder’s name', value: 'John Smith'),
-            SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             _buildTextField(label: 'Card number', value: '1233 2343 2432 2243'),
-            SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                     child: _buildTextField(label: 'Valid til', value: '12/21')),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(child: _buildTextField(label: 'CVV', value: '***')),
               ],
             ),
@@ -127,28 +115,33 @@ class PaymentInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-          SizedBox(height: 4),
-          Text(value, style: TextStyle(fontSize: 14)),
+              style:
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(fontSize: 14)),
         ],
       ),
     );
   }
 
   Widget _buildFooterButton(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          _showMyDialog(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Home(),
+              )); // Ensure this route exists
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF583EF2),
+          backgroundColor: const Color(0xFF583EF2),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          padding: EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
         ),
-        child: Text(
+        child: const Text(
           'Next',
           style: TextStyle(
             fontSize: 20,
@@ -157,107 +150,6 @@ class PaymentInfo extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showMyDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // User must tap a button to dismiss the dialog
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              'Confirmation',
-              style: TextStyle(
-                fontSize: 20,
-                color: Color(0xFF583EF2),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Selected Package',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Only Once',
-                  style: TextStyle(
-                    color: Color(0x80000000),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Service',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Bathroom Cleaning',
-                  style: TextStyle(
-                    color: Color(0x80000000),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Amount',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      'Total payable amount   ',
-                      style: TextStyle(
-                        color: Color(0x80000000),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '10\$',
-                      style: TextStyle(
-                        color: Color(0xff6E6BE8),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Center(
-              child: ElevatedButton(
-                child: Text(
-                  'Confirm',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  // Perform action and then dismiss the dialog
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF583EF2),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }

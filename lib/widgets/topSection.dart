@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // To handle File
 
-class TopSection extends StatefulWidget {
+class TopSection extends StatelessWidget {
   const TopSection({
     super.key,
     required this.screenWidth,
@@ -13,94 +11,145 @@ class TopSection extends StatefulWidget {
   final double screenHeight;
 
   @override
-  _TopSectionState createState() => _TopSectionState();
-}
-
-class _TopSectionState extends State<TopSection> {
-  File? _image;
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         // Purple header section
         Container(
-          width: widget.screenWidth,
-          height: widget.screenHeight * 0.30,
-          decoration: BoxDecoration(
-            color: const Color(0xFF6D6BE7),
-            borderRadius: const BorderRadius.only(
+          width: screenWidth,
+          height: screenHeight * 0.31,
+          decoration: const BoxDecoration(
+            color: Color(0xFF6D6BE7),
+            borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(45),
               bottomRight: Radius.circular(45),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50.0, left: 20, right: 20),
+          child: const Padding(
+            padding: EdgeInsets.only(top: 50.0, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Upload profile image',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          width: 100, // Adjust the width
-                          height: 100, // Adjust the height
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              topRight: Radius.circular(64),
-                              bottomLeft: Radius.circular(64),
-                              bottomRight: Radius.circular(64),
-                            ),
-                            color: Colors
-                                .grey[200], // Background color of the container
-                            image: _image != null
-                                ? DecorationImage(
-                                    image: FileImage(_image!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null, // Display the image if selected
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      color: Colors.orange,
+                      size: 40, // Icon size as per request
+                    ),
+                    SizedBox(width: 5),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'My location',
+                          style: TextStyle(
+                            color: Color(0xFFB0BCE7),
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
                           ),
-                          child: _image == null
-                              ? const Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: Colors.grey,
-                                  size: 40,
-                                )
-                              : null,
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+                        Row(
+                          children: [
+                            Text(
+                              'Barcelona, Spain',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 16,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40),
+                Text(
+                  'Hi Saim,',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'Need some help today?',
+                  style: TextStyle(
+                    color: Color(0xFFF8F8FA),
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
+          ),
+        ),
+
+        // Custom toggle button with stack for opacity control
+        Positioned(
+          top: screenHeight * 0.18,
+          right: 20,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Container with opacity
+              Opacity(
+                opacity: 0.7, // Apply opacity only to the background container
+                child: Container(
+                  width: screenWidth * 0.2,
+                  height: screenWidth * 0.2,
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFFEAE9FF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(100),
+                        bottomLeft: Radius.circular(100),
+                        bottomRight: Radius.circular(100),
+                      ),
+                    ),
+                    shadows: [
+                      BoxShadow(
+                        color: Color(0x266D6BE7),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                        spreadRadius: 1,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              // White lines without opacity effect
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // First thick white line
+                  Container(
+                    width: 30,
+                    height: 5, // Increased thickness
+                    color: Colors.white, // White color for the line
+                  ),
+                  const SizedBox(height: 8),
+                  // Second thick white line
+                  Container(
+                    width: 30,
+                    height: 5, // Increased thickness
+                    color: Colors.white, // White color for the line
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],

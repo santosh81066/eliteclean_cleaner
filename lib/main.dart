@@ -1,4 +1,5 @@
 import 'package:eliteclean_cleaner/screens/cleaner_registration.dart';
+import 'package:eliteclean_cleaner/screens/home.dart';
 import 'package:eliteclean_cleaner/screens/loginpage.dart';
 
 import 'package:eliteclean_cleaner/screens/otpverify.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         '/verify': (context) => const Verify(),
         '/register': (context) => const CleanerRegistration(),
         '/userprofile': (context) => const UserProfile(),
-        '/paymentinfo': (context) => PaymentInfo(),
+        '/paymentinfo': (context) => const PaymentInfo(),
+        '/home': (context) => const Home(),
       },
     );
   }
