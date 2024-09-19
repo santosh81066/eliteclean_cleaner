@@ -59,7 +59,7 @@ class _SplashscreenState extends State<Splashscreen> {
                     child: SvgPicture.asset(
                       'assets/images/icon-32-x-clean.svg', // Path to your SVG file
                       fit: BoxFit.contain, // Adjust fit as needed
-                    ), // Replace this with your custom icon
+                    ),
                   ),
                 ),
               ),

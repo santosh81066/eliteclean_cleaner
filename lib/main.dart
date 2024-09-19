@@ -1,4 +1,5 @@
 import 'package:eliteclean_cleaner/screens/cleaner_registration.dart';
+import 'package:eliteclean_cleaner/screens/holidayapplication.dart';
 import 'package:eliteclean_cleaner/screens/home.dart';
 import 'package:eliteclean_cleaner/screens/loginpage.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/userprofile': (context) => const UserProfile(),
         '/paymentinfo': (context) => const PaymentInfo(),
         '/home': (context) => const Home(),
+        '/applyholiday': (context) => const ApplyHoliday(),
       },
     );
   }

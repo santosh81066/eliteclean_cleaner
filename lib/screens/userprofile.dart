@@ -41,155 +41,169 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final double paddingHorizontal =
+        screenWidth * 0.04; // 4% of screen width for horizontal padding
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Ensures column content is aligned left
-        children: [
-          TopSectionProfile(
-              screenWidth: screenWidth, screenHeight: screenHeight),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment
+              .start, // Ensures column content is aligned left
+          children: [
+            TopSectionProfile(
+                screenWidth: screenWidth, screenHeight: screenHeight),
 
-          // Main content section (Your Packages and Services)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal:
-                    16), // Adds padding to bring text away from the edges
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                const Text(
-                  'Upload ID Card Image',
-                  style: TextStyle(
-                    color: Color(0xFF583EF2),
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
+            // Main content section (Your Packages and Services)
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      paddingHorizontal), // Responsive horizontal padding
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                      height: screenHeight *
+                          0.04), // 4% of screen height for spacing
+                  const Text(
+                    'Upload ID Card Image',
+                    style: TextStyle(
+                      color: Color(0xFF583EF2),
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Front side',
-                  style: TextStyle(
-                    color: Color(0xFF1E116B),
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
+                  SizedBox(
+                      height: screenHeight *
+                          0.02), // 2% of screen height for spacing
+                  const Text(
+                    'Front side',
+                    style: TextStyle(
+                      color: Color(0xFF1E116B),
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: _pickFrontImage,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(64),
-                        bottomLeft: Radius.circular(64),
-                        bottomRight: Radius.circular(64),
+                  SizedBox(
+                      height: screenHeight *
+                          0.01), // 1% of screen height for spacing
+                  GestureDetector(
+                    onTap: _pickFrontImage,
+                    child: Container(
+                      width:
+                          screenWidth * 0.25, // 25% of screen width for image
+                      height: screenWidth * 0.25, // Maintain square shape
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(screenWidth * 0.01),
+                          topRight: Radius.circular(screenWidth * 0.16),
+                          bottomLeft: Radius.circular(screenWidth * 0.16),
+                          bottomRight: Radius.circular(screenWidth * 0.16),
+                        ),
+                        color: const Color(0xffffffff),
+                        border: Border.all(
+                          style: BorderStyle.solid,
+                          color: const Color(0xffEAEAFF),
+                          width: 1.5,
+                        ),
+                        image: _frontImage != null
+                            ? DecorationImage(
+                                image: FileImage(_frontImage!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      color: const Color(0xffffffff),
-                      border: Border.all(
-                        style: BorderStyle.solid,
-                        color: Color(0xffEAEAFF),
-                        width: 1.5,
-                      ),
-                      image: _frontImage != null
-                          ? DecorationImage(
-                              image: FileImage(_frontImage!),
-                              fit: BoxFit.cover,
+                      child: _frontImage == null
+                          ? Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.grey,
+                              size: screenWidth *
+                                  0.1, // Adjust icon size relative to screen width
                             )
                           : null,
                     ),
-                    child: _frontImage == null
-                        ? const Icon(
-                            Icons.camera_alt_outlined,
-                            color: Colors.grey,
-                            size: 40,
-                          )
-                        : null,
                   ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Back side',
-                  style: TextStyle(
-                    color: Color(0xFF1E116B),
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: screenHeight * 0.02),
+                  const Text(
+                    'Back side',
+                    style: TextStyle(
+                      color: Color(0xFF1E116B),
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: _pickBackImage,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffffffff),
-                      border: Border.all(
-                        style: BorderStyle.solid,
-                        color: Color(0xffEAEAFF),
-                        width: 1.5,
+                  SizedBox(height: screenHeight * 0.01),
+                  GestureDetector(
+                    onTap: _pickBackImage,
+                    child: Container(
+                      width: screenWidth * 0.25,
+                      height: screenWidth * 0.25,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffffffff),
+                        border: Border.all(
+                          style: BorderStyle.solid,
+                          color: const Color(0xffEAEAFF),
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(screenWidth * 0.01),
+                          topRight: Radius.circular(screenWidth * 0.16),
+                          bottomLeft: Radius.circular(screenWidth * 0.16),
+                          bottomRight: Radius.circular(screenWidth * 0.16),
+                        ),
+                        image: _backImage != null
+                            ? DecorationImage(
+                                image: FileImage(_backImage!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(64),
-                        bottomLeft: Radius.circular(64),
-                        bottomRight: Radius.circular(64),
-                      ),
-                      image: _backImage != null
-                          ? DecorationImage(
-                              image: FileImage(_backImage!),
-                              fit: BoxFit.cover,
+                      child: _backImage == null
+                          ? Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.grey,
+                              size: screenWidth * 0.1, // Adjust icon size
                             )
                           : null,
                     ),
-                    child: _backImage == null
-                        ? const Icon(
-                            Icons.camera_alt_outlined,
-                            color: Colors.grey,
-                            size: 40,
-                          )
-                        : null,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 125,
-          ),
-          Center(
-            child: SizedBox(
-              width: screenWidth * 0.80,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/paymentinfo');
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: const Color(0xFF583EF2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+            SizedBox(
+                height: screenHeight * 0.1), // 10% of screen height for spacing
+            Center(
+              child: SizedBox(
+                width:
+                    screenWidth * 0.80, // Button width at 80% of screen width
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/paymentinfo');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.02), // Responsive padding
+                    backgroundColor: const Color(0xFF583EF2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          screenWidth * 0.04), // Responsive corner radius
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

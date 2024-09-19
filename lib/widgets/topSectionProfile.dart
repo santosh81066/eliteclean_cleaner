@@ -77,7 +77,7 @@ class _TopSectionProfileState extends State<TopSectionProfile> {
           ),
           Positioned(
             top: 160,
-            left: 160,
+            left: 150,
             child: GestureDetector(
               onTap: _pickImage,
               child: Container(

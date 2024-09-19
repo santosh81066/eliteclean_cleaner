@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/topSection.dart';
+import 'bookings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,15 +27,7 @@ class _HomeState extends State<Home> {
       // Home Page
       const Home(),
 
-      const Center(
-        child: Text(
-          'Bookings Page',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      BookingScreen(),
       // Settings Page
       const Center(
         child: Text(
