@@ -1,9 +1,16 @@
+import 'package:eliteclean_cleaner/providers/navigation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -69,7 +76,6 @@ class Login extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Your name" label and input field
-                        // "Phone number" label and input field
                         Text(
                           'Your name',
                           style: TextStyle(
@@ -99,14 +105,10 @@ class Login extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-                    const SizedBox(
-                      height: 25,
-                    ),
+                    const SizedBox(height: 25),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // "Your name" label and input field
-                        // "Phone number" label and input field
                         Text(
                           'Phone number',
                           style: TextStyle(
@@ -137,14 +139,40 @@ class Login extends StatelessWidget {
                         Divider(),
                       ],
                     ),
-
+                    SizedBox(height: 20),
+                    Consumer(
+                      builder: (con, ref, wid) {
+                        var navigate = ref.watch(navigationProvider.notifier);
+                        return Row(
+                          children: [
+                            Radio(
+                              value: 0,
+                              groupValue: ref.watch(navigationProvider),
+                              onChanged: (int? value) {
+                                navigate.navigate(0);
+                              },
+                            ),
+                            Text('Cleaner'),
+                            Radio(
+                              value: 1,
+                              groupValue: ref.watch(navigationProvider),
+                              onChanged: (int? value) {
+                                navigate.navigate(1);
+                              },
+                            ),
+                            Text('Supervisor'),
+                          ],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 30),
                     // "Next" button aligned at the bottom and full width
                     SizedBox(
                       width:
                           double.infinity, // Makes the button take full width
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/verify');
+                          Navigator.of(context).pushNamed('/verify');
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),

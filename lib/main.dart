@@ -7,11 +7,13 @@ import 'package:eliteclean_cleaner/screens/otpverify.dart';
 import 'package:eliteclean_cleaner/screens/payment_info.dart';
 import 'package:eliteclean_cleaner/screens/slashscreen.dart';
 import 'package:eliteclean_cleaner/screens/userprofile.dart';
+import 'package:eliteclean_cleaner/supervisor_screens/home_supervisor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Import your LoginPage widget
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/userprofile': (context) => const UserProfile(),
         '/paymentinfo': (context) => const PaymentInfo(),
         '/home': (context) => const Home(),
+        '/homesupervisor': (context) => HomeSupervisor(),
         '/applyholiday': (context) => const ApplyHoliday(),
       },
     );

@@ -1,4 +1,6 @@
+import 'package:eliteclean_cleaner/providers/navigation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Verify extends StatelessWidget {
@@ -114,31 +116,38 @@ class Verify extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Confirm button (full-width)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/register');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xFF583EF2), // Button background color
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 14), // Full-width button
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                  Consumer(builder: (con, ref, wid) {
+                    var navigate = ref.watch(navigationProvider);
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (navigate == 0) {
+                            Navigator.pushNamed(context, '/register');
+                          } else {
+                            Navigator.pushNamed(context, '/homesupervisor');
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(
+                              0xFF583EF2), // Button background color
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 14), // Full-width button
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        child: const Text(
+                          'Confirm',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white, // White font color in button
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white, // White font color in button
-                        ),
-                      ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),
