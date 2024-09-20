@@ -35,7 +35,7 @@ class TopSection extends StatelessWidget {
                     Icon(
                       Icons.location_on,
                       color: Colors.orange,
-                      size: 40, // Icon size as per request
+                      size: 40,
                     ),
                     SizedBox(width: 5),
                     Column(
@@ -135,25 +135,20 @@ class TopSection extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
-                    bottomLeft:
-                        Radius.circular(8), // Custom radius for bottom left
-                    bottomRight:
-                        Radius.circular(8), // Custom radius for bottom right
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
                   ),
                 ),
                 onSelected: (String result) {
                   switch (result) {
                     case 'Profile':
                       Navigator.of(context).pushNamed('/profile');
-                      // Handle edit action
                       break;
                     case 'All cleaners':
                       Navigator.of(context).pushNamed('/allcleaners');
-                      // Handle edit action
                       break;
                     case 'Holiday applications':
                       Navigator.of(context).pushNamed('/holidayapps');
-                      // Handle edit action
                       break;
                   }
                 },
@@ -175,95 +170,99 @@ class TopSection extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // First thick white line
                   Container(
                     width: 30,
-                    height: 5, // Increased thickness
-                    color: Colors.white, // White color for the line
+                    height: 5,
+                    color: Colors.white,
                   ),
                   const SizedBox(height: 8),
-                  // Second thick white line
                   Container(
                     width: 30,
-                    height: 5, // Increased thickness
+                    height: 5,
                     color: Colors.white,
-                    // White color for the line
                   ),
                 ],
               ),
             ],
           ),
         ),
+
+        // Responsive row of containers
         Positioned(
-          bottom: screenHeight * 0.0325,
+          bottom: screenHeight * 0.01,
+          left: screenWidth * 0.04,
           right: screenWidth * 0.04,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                decoration: const BoxDecoration(
-                  color: Color(0xffEAEAFF),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+              Expanded(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffEAEAFF),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  textAlign: TextAlign.center,
-                  "5 new booking\nrequests",
-                  style: TextStyle(
-                    color: Color(0xff38385E),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                decoration: const BoxDecoration(
-                  color: Color(0xffFFEBF0),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
-                  ),
-                ),
-                child: const Text(
-                  textAlign: TextAlign.center,
-                  "10 new cleaners",
-                  style: TextStyle(
-                    color: Color(0xff38385E),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    "5 new booking\nrequests",
+                    style: TextStyle(
+                      color: Color(0xff38385E),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
-              SizedBox(width: 16),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-                decoration: const BoxDecoration(
-                  color: Color(0xffECFCFF),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFFEBF0),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    "10 new cleaners",
+                    style: TextStyle(
+                      color: Color(0xff38385E),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-                child: const Text(
-                  textAlign: TextAlign.center,
-                  "2 cleaners on\nholiday",
-                  style: TextStyle(
-                    color: Color(0xff38385E),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffECFCFF),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    "2 cleaners on\nholiday",
+                    style: TextStyle(
+                      color: Color(0xff38385E),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),

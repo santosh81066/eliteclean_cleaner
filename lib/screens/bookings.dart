@@ -29,6 +29,8 @@ class BookingScreen extends StatelessWidget {
     // Add more bookings if needed
   ];
 
+  BookingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
