@@ -63,7 +63,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 25),
                         const Text(
                           "Today's work",
                           style: TextStyle(
@@ -143,7 +143,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                             "Ali Raza",
                                             style: TextStyle(
                                               color: Colors.grey[800],
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -151,17 +151,23 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           Row(
                                             children: [
                                               const Icon(
-                                                  Icons.location_on_outlined),
+                                                Icons.location_on_outlined,
+                                                color: Color(0xffF3A8A2),
+                                              ),
                                               Text(
                                                 "Room 123, Brooklyn St,\n Kepler District",
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xff6E6BE8),
                                                   fontSize: 14,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const Text("1 House"),
+                                          const Text(
+                                            "1 House",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "3 washrooms",
                                             style: TextStyle(
@@ -172,7 +178,11 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          const Text("Time"),
+                                          const Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "12:30 PM",
                                             style: TextStyle(
@@ -183,7 +193,15 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(height: 8),
                                           Row(
                                             children: [
-                                              const Text("Date"),
+                                              const Text(
+                                                "Date",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
                                               Text(
                                                 '22 Mar 2021',
                                                 style: TextStyle(
@@ -192,7 +210,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                                 ),
                                               ),
                                               const SizedBox(
-                                                width: 20,
+                                                width: 18,
                                               ),
                                               Container(
                                                 padding:
@@ -302,7 +320,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                             "Ali Raza",
                                             style: TextStyle(
                                               color: Colors.grey[800],
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -310,17 +328,23 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           Row(
                                             children: [
                                               const Icon(
-                                                  Icons.location_on_outlined),
+                                                Icons.location_on_outlined,
+                                                color: Color(0xffF3A8A2),
+                                              ),
                                               Text(
                                                 "Room 123, Brooklyn St,\n Kepler District",
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xff6E6BE8),
                                                   fontSize: 14,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const Text("1 House"),
+                                          const Text(
+                                            "1 House",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "3 washrooms",
                                             style: TextStyle(
@@ -331,7 +355,11 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          const Text("Time"),
+                                          const Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "12:30 PM",
                                             style: TextStyle(
@@ -342,7 +370,15 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(height: 8),
                                           Row(
                                             children: [
-                                              const Text("Date"),
+                                              const Text(
+                                                "Date",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
                                               Text(
                                                 '22 Mar 2021',
                                                 style: TextStyle(
@@ -351,7 +387,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                                 ),
                                               ),
                                               const SizedBox(
-                                                width: 20,
+                                                width: 18,
                                               ),
                                               Container(
                                                 padding:
@@ -479,29 +515,82 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           const SizedBox(height: 4),
-                                          Text(
-                                            "Ali Raza",
-                                            style: TextStyle(
-                                              color: Colors.grey[800],
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Ali Raza",
+                                                style: TextStyle(
+                                                  color: Colors.grey[800],
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              // PopupMenuButton<String>(
+                                              //   offset: const Offset(0, 30),
+                                              //   color: Colors.white,
+                                              //   icon: const Icon(
+                                              //       Icons.more_horiz,
+                                              //       color: Colors.black),
+                                              //   shape:
+                                              //       const RoundedRectangleBorder(
+                                              //     borderRadius:
+                                              //         BorderRadius.only(
+                                              //       bottomLeft:
+                                              //           Radius.circular(8),
+                                              //       bottomRight:
+                                              //           Radius.circular(8),
+                                              //     ),
+                                              //   ),
+                                              //   onSelected: (String result) {
+                                              //     switch (result) {
+                                              //       case 'Accept':
+                                              //         Navigator.of(context)
+                                              //             .pushNamed(
+                                              //                 '/pendingbooking');
+                                              //         break;
+                                              //       case 'Reject':
+                                              //         Navigator.of(context)
+                                              //             .pushNamed(
+                                              //                 '/pendingbooking');
+                                              //         break;
+                                              //     }
+                                              //   },
+                                              //   itemBuilder: (BuildContext
+                                              //           context) =>
+                                              //       <PopupMenuEntry<String>>[
+                                              //     const PopupMenuItem<String>(
+                                              //       value: 'Accept',
+                                              //       child: Text('Accept'),
+                                              //     ),
+                                              //     const PopupMenuItem<String>(
+                                              //       value: 'Reject',
+                                              //       child: Text('Reject'),
+                                              //     ),
+                                              //   ],
+                                              // ),
+                                            ],
                                           ),
                                           const SizedBox(height: 8),
                                           Row(
                                             children: [
                                               const Icon(
-                                                  Icons.location_on_outlined),
+                                                Icons.location_on_outlined,
+                                                color: Color(0xffF3A8A2),
+                                              ),
                                               Text(
                                                 "Room 123, Brooklyn St,\n Kepler District",
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xff6E6BE8),
                                                   fontSize: 14,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const Text("1 House"),
+                                          const Text(
+                                            "1 House",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "3 washrooms",
                                             style: TextStyle(
@@ -512,7 +601,11 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          const Text("Time"),
+                                          const Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "12:30 PM",
                                             style: TextStyle(
@@ -523,7 +616,15 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(height: 8),
                                           Row(
                                             children: [
-                                              const Text("Date"),
+                                              const Text(
+                                                "Date",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
                                               Text(
                                                 '22 Mar 2021',
                                                 style: TextStyle(
@@ -532,7 +633,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                                 ),
                                               ),
                                               const SizedBox(
-                                                width: 20,
+                                                width: 18,
                                               ),
                                               Container(
                                                 padding:
@@ -642,7 +743,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                             "Ali Raza",
                                             style: TextStyle(
                                               color: Colors.grey[800],
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -650,17 +751,23 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           Row(
                                             children: [
                                               const Icon(
-                                                  Icons.location_on_outlined),
+                                                Icons.location_on_outlined,
+                                                color: Color(0xffF3A8A2),
+                                              ),
                                               Text(
                                                 "Room 123, Brooklyn St,\n Kepler District",
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xff6E6BE8),
                                                   fontSize: 14,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const Text("1 House"),
+                                          const Text(
+                                            "1 House",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "3 washrooms",
                                             style: TextStyle(
@@ -671,7 +778,11 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          const Text("Time"),
+                                          const Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           Text(
                                             "12:30 PM",
                                             style: TextStyle(
@@ -682,7 +793,15 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                           const SizedBox(height: 8),
                                           Row(
                                             children: [
-                                              const Text("Date"),
+                                              const Text(
+                                                "Date",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
                                               Text(
                                                 '22 Mar 2021',
                                                 style: TextStyle(
@@ -691,7 +810,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                                 ),
                                               ),
                                               const SizedBox(
-                                                width: 20,
+                                                width: 18,
                                               ),
                                               Container(
                                                 padding:

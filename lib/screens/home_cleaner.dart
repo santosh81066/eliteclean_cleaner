@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/topSection.dart';
+import '../widgets/topSectionCleaner.dart';
 import 'bookings.dart';
 
 class Home extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'home.dart';
+import 'home_cleaner.dart';
 
 class PaymentInfo extends StatelessWidget {
   const PaymentInfo({super.key});

@@ -98,36 +98,79 @@ class TopSection extends StatelessWidget {
 
         // Custom toggle button with stack for opacity control
         Positioned(
-          top: screenHeight * 0.105,
-          right: 20,
+          top: screenHeight * 0.08,
+          right: screenWidth * 0.05,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Opacity(
-                opacity: 0.7,
-                child: Container(
-                  width: screenWidth * 0.2,
-                  height: screenWidth * 0.2,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFFEAE9FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(100),
-                        bottomLeft: Radius.circular(100),
-                        bottomRight: Radius.circular(100),
+              PopupMenuButton<String>(
+                offset: const Offset(-20, 100),
+                color: Colors.white,
+                icon: Opacity(
+                  opacity: 0.7,
+                  child: Container(
+                    width: screenWidth * 0.2,
+                    height: screenWidth * 0.2,
+                    decoration: const ShapeDecoration(
+                      color: Color(0xFFEAE9FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(100),
+                          bottomLeft: Radius.circular(100),
+                          bottomRight: Radius.circular(100),
+                        ),
                       ),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x266D6BE7),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                          spreadRadius: 1,
+                        )
+                      ],
                     ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x266D6BE7),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                        spreadRadius: 1,
-                      )
-                    ],
                   ),
                 ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft:
+                        Radius.circular(8), // Custom radius for bottom left
+                    bottomRight:
+                        Radius.circular(8), // Custom radius for bottom right
+                  ),
+                ),
+                onSelected: (String result) {
+                  switch (result) {
+                    case 'Profile':
+                      Navigator.of(context).pushNamed('/profile');
+                      // Handle edit action
+                      break;
+                    case 'All cleaners':
+                      Navigator.of(context).pushNamed('/allcleaners');
+                      // Handle edit action
+                      break;
+                    case 'Holiday applications':
+                      Navigator.of(context).pushNamed('/holidayapps');
+                      // Handle edit action
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Profile',
+                    child: Text('Profile'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'All cleaners',
+                    child: Text('All cleaners'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Holiday applications',
+                    child: Text('Holiday applications'),
+                  ),
+                ],
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
