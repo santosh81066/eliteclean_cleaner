@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/userprofile': (context) => const UserProfile(),
         '/paymentinfo': (context) => const PaymentInfo(),
         '/home': (context) => const Home(),
-        '/homesupervisor': (context) => HomeSupervisor(),
+        '/homesupervisor': (context) => const HomeSupervisor(),
         '/applyholiday': (context) => const ApplyHoliday(),
         '/allcleaners': (context) => AllCleaners(),
         '/holidayapps': (context) => HolidayApps(),

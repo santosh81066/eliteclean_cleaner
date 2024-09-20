@@ -139,7 +139,7 @@ class _LoginState extends State<Login> {
                         Divider(),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Consumer(
                       builder: (con, ref, wid) {
                         var navigate = ref.watch(navigationProvider.notifier);
@@ -152,7 +152,7 @@ class _LoginState extends State<Login> {
                                 navigate.navigate(0);
                               },
                             ),
-                            Text('Cleaner'),
+                            const Text('Cleaner'),
                             Radio(
                               value: 1,
                               groupValue: ref.watch(navigationProvider),
@@ -160,12 +160,12 @@ class _LoginState extends State<Login> {
                                 navigate.navigate(1);
                               },
                             ),
-                            Text('Supervisor'),
+                            const Text('Supervisor'),
                           ],
                         );
                       },
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     // "Next" button aligned at the bottom and full width
                     SizedBox(
                       width:
