@@ -26,6 +26,15 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
       const HomeSupervisor(),
       const Center(
         child: Text(
+          'Bookings',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      const Center(
+        child: Text(
           'Settings Page',
           style: TextStyle(
             fontSize: 24,
