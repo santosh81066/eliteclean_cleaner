@@ -2,7 +2,6 @@ import 'package:eliteclean_cleaner/screens/cleaner_registration.dart';
 import 'package:eliteclean_cleaner/screens/holidayapplication.dart';
 import 'package:eliteclean_cleaner/screens/home_cleaner.dart';
 import 'package:eliteclean_cleaner/screens/loginpage.dart';
-
 import 'package:eliteclean_cleaner/screens/otpverify.dart';
 import 'package:eliteclean_cleaner/screens/payment_info.dart';
 import 'package:eliteclean_cleaner/screens/slashscreen.dart';
@@ -12,9 +11,19 @@ import 'package:eliteclean_cleaner/supervisor_screens/holiday_applications.dart'
 import 'package:eliteclean_cleaner/supervisor_screens/home_supervisor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// Import your LoginPage widget
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+// Import your LoginPage widget
+void main() async {
+  // Ensure that widget binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(ProviderScope(child: const MyApp()));
 }
 
