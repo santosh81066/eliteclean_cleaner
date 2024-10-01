@@ -1,7 +1,12 @@
+import 'package:eliteclean_cleaner/providers/loader.dart';
 import 'package:eliteclean_cleaner/providers/navigation_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:async'; // Add this to use Future.delayed
+
+import '../providers/auth.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,6 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -68,48 +74,14 @@ class _LoginState extends State<Login> {
                   border: Border.all(color: const Color(0xFFEAE9FF)),
                 ),
                 child: Column(
-                  // Align the button at the bottom
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Form fields
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // "Your name" label and input field
-                        Text(
-                          'Your name',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1F1F39),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.person, color: Color(0xFFB8B8D2)),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: TextField(
-                                keyboardType: TextInputType.name,
-                                decoration: InputDecoration(
-                                  hintText: 'your name here',
-                                  border: InputBorder.none,
-                                  hintStyle:
-                                      TextStyle(color: Color(0xFFB8B8D2)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(),
-                      ],
-                    ),
                     const SizedBox(height: 25),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Phone number',
                           style: TextStyle(
                             fontSize: 12,
@@ -117,16 +89,21 @@ class _LoginState extends State<Login> {
                             color: Color(0xFF1F1F39),
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.phone_outlined,
+                            const Icon(Icons.phone_outlined,
                                 color: Color(0xFFB8B8D2)),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
+                            Text(
+                              "+91 ",
+                              style: TextStyle(fontSize: 16),
+                            ),
                             Expanded(
                               child: TextField(
+                                controller: _controller,
                                 keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: 'your phone number here',
                                   border: InputBorder.none,
                                   hintStyle:
@@ -136,60 +113,69 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 60),
+
+                    // "Next" button aligned at the bottom and full width
                     Consumer(
-                      builder: (con, ref, wid) {
-                        var navigate = ref.watch(navigationProvider.notifier);
-                        return Row(
-                          children: [
-                            Radio(
-                              value: 0,
-                              groupValue: ref.watch(navigationProvider),
-                              onChanged: (int? value) {
-                                navigate.navigate(0);
-                              },
+                      builder:
+                          (BuildContext context, WidgetRef ref, Widget? child) {
+                        var loader = ref.watch(loadingProvider);
+                        return SizedBox(
+                          width: double
+                              .infinity, // Makes the button take full width
+                          child: ElevatedButton(
+                            onPressed: loader == true
+                                ? () {} // Disable interaction but keep the style
+                                : () {
+                                    // Start the loader
+                                    ref.read(loadingProvider.notifier).state =
+                                        true;
+
+                                    // Start the loader and wait for 3 seconds
+                                    Future.delayed(const Duration(seconds: 3),
+                                        () {
+                                      // Stop the loader
+                                      ref.read(loadingProvider.notifier).state =
+                                          false;
+
+                                      // Navigate to the next page
+                                      Navigator.pushNamed(context, '/verify');
+                                    });
+
+                                    // Phone authentication (can be asynchronous)
+                                    ref.read(authProvider.notifier).phoneAuth(
+                                          context,
+                                          "+91${_controller.text.trim()}",
+                                          ref,
+                                        );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: const Color(
+                                  0xFF583EF2), // Button color remains constant
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
                             ),
-                            const Text('Cleaner'),
-                            Radio(
-                              value: 1,
-                              groupValue: ref.watch(navigationProvider),
-                              onChanged: (int? value) {
-                                navigate.navigate(1);
-                              },
-                            ),
-                            const Text('Supervisor'),
-                          ],
+                            child: loader == true
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    'Next',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors
+                                          .white, // Set text color to white
+                                    ),
+                                  ),
+                          ),
                         );
                       },
-                    ),
-                    const SizedBox(height: 30),
-                    // "Next" button aligned at the bottom and full width
-                    SizedBox(
-                      width:
-                          double.infinity, // Makes the button take full width
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/verify');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: const Color(0xFF583EF2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white, // Set text color to white
-                          ),
-                        ),
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),
