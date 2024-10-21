@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'providers/auth.dart';
 
 // Import your LoginPage widget
 void main() async {
@@ -42,8 +43,44 @@ class MyApp extends StatelessWidget {
       // Define the initial route and the routes in the app
       initialRoute: '/',
       routes: {
-        '/': (context) =>
-            const Splashscreen(), // Splashscreen as the initial screen
+        '/': (context) {
+          return Consumer(
+            builder: (context, ref, child) {
+              final authState = ref.watch(authProvider);
+
+              // Check if the user has a valid refresh token
+              if (authState.data?.refreshToken != null &&
+                  authState.data!.refreshToken!.isNotEmpty) {
+                print('Refresh token exists: ${authState.data?.refreshToken}');
+                return Home(); // User is authenticated, redirect to Home
+              } else {
+                print('No valid refresh token, trying auto-login');
+              }
+
+              // Attempt auto-login if refresh token is not in state
+              return FutureBuilder(
+                future: ref.watch(authProvider.notifier).tryAutoLogin(),
+                builder: (context, snapshot) {
+                  print(
+                      'Token after auto-login attempt: ${authState.data?.accessToken}');
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    ); // Show SplashScreen while waiting
+                  } else if (snapshot.hasData &&
+                      snapshot.data == true &&
+                      authState.data?.refreshToken != null) {
+                    // If auto-login is successful and refresh token is available, go to Home
+                    return Home();
+                  } else {
+                    // If auto-login fails, redirect to login page
+                    return Login();
+                  }
+                },
+              );
+            },
+          );
+        }, // Splashscreen as the initial screen
         '/login': (context) => const Login(),
         '/verify': (context) => const Verify(),
         '/register': (context) => const CleanerRegistration(),

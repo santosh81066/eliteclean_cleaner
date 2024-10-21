@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/authstate.dart';
+import '../utils/eliteclean_api.dart';
 import 'loader.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -32,12 +33,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
               exception.message ?? "An error occurred.");
         },
         codeSent: (String verificationId, [int? forceResendingToken]) async {
+          loadingState.state = false;
           _showAlertDialog(
               context, "Code Sent", "Verification code sent on your mobile.");
-          Navigator.of(context).pushNamed('verifyotp', arguments: phoneNumber);
+          Navigator.of(context).pushNamed('/verify', arguments: phoneNumber);
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('verificationid', verificationId);
-          loadingState.state = false;
         },
         timeout: const Duration(seconds: 30),
         codeAutoRetrievalTimeout: (String verificationId) {
@@ -51,15 +52,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signInWithPhoneNumber(
-      String smsCode,
-      BuildContext context,
-      WidgetRef ref,
-      String phoneNumber,
-      ScaffoldMessengerState scaffoldKey) async {
+    String smsCode,
+    BuildContext context,
+    WidgetRef ref,
+    String phoneNumber,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     String? verificationId = prefs.getString('verificationid');
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authProvider.notifier);
     final loadingState = ref.watch(loadingProvider.notifier);
+    print("verificationid: $verificationId");
     try {
       loadingState.state = true;
 
@@ -68,8 +70,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       await auth.signInWithCredential(credential).then((value) async {
         if (value.user != null) {
+          print("user is not null");
           var user = auth.currentUser!;
-
+          authState.checkmobileno(ref, mobileno: phoneNumber);
           user.getIdToken().then((ftoken) async {
             await prefs.setString('firebaseToken', ftoken!);
           });
@@ -148,35 +151,41 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     // Extract individual data fields from the saved data
     final newUser = Data(
-      userId: extractedData['userId'],
-      username: extractedData['username'],
-      countryname: extractedData['countryname'],
-      state: extractedData['state'],
-      city: extractedData['city'],
-      address: extractedData['address'],
-      profilePic: extractedData['profile_pic'],
-      useRole: extractedData['use_role'],
-      idFront: extractedData['id_front'],
-      idBack: extractedData['id_back'],
-      idCard: extractedData['id_card'],
-      bankaccountno: extractedData['bankaccountno'],
-      bankname: extractedData['bankname'],
-      ifsccode: extractedData['ifsccode'],
-      latitude: extractedData['latitude'],
-      longitude: extractedData['longitude'],
-      radius: extractedData['radius'],
-      accessToken: extractedData['accessToken'],
+      userId: extractedData['userId'] ?? '', // Provide default value if null
+      username: extractedData['username'] ?? '', // Default to empty string
+      countryname: extractedData['countryname'] ?? '',
+      state: extractedData['state'] ?? '',
+      city: extractedData['city'] ?? '',
+      address: extractedData['address'] ?? '',
+      profilePic: extractedData['profile_pic'] ?? '',
+      useRole: extractedData['use_role'] ?? '',
+      idFront: extractedData['id_front'] ?? '',
+      idBack: extractedData['id_back'] ?? '',
+      idCard: extractedData['id_card'] ?? '',
+      bankaccountno: extractedData['bankaccountno'] ?? '',
+      bankname: extractedData['bankname'] ?? '',
+      ifsccode: extractedData['ifsccode'] ?? '',
+      latitude: extractedData['latitude'] != null
+          ? double.tryParse(extractedData['latitude']) ?? 0.0
+          : 0.0, // Default to 0.0 if null or invalid
+      longitude: extractedData['longitude'] != null
+          ? double.tryParse(extractedData['longitude']) ?? 0.0
+          : 0.0, // Default to 0.0 if null or invalid
+      radius: extractedData['radius'] != null
+          ? double.tryParse(extractedData['radius']) ?? 0.0
+          : 0.0, // Default to 0.0 if null or invalid
+      accessToken: extractedData['access_token'] ?? '',
       accessTokenExpiresAt: extractedData['accessTokenExpiry'] != null
-          ? DateTime.parse(extractedData['accessTokenExpiry'])
-              .millisecondsSinceEpoch
-          : null,
-      refreshToken: extractedData['refreshToken'],
+          ? int.tryParse(extractedData['accessTokenExpiry']
+              .toString()) // Ensure it's a valid timestamp
+          : null, // Default to null if the expiry is invalid or missing
+      refreshToken: extractedData['refresh_token'] ?? '',
       refreshTokenExpiresAt: extractedData['refreshTokenExpiry'] != null
-          ? DateTime.parse(extractedData['refreshTokenExpiry'])
-              .millisecondsSinceEpoch
-          : null,
+          ? int.tryParse(extractedData['refreshTokenExpiry']
+              .toString()) // Ensure it's a valid timestamp
+          : null, // Default to null if the expiry is invalid or missing
     );
-
+    print("tryautologin user $extractedData");
     // Update the AuthState with new data using copyWith
     state = state.copyWith(
       data: newUser, // Updating the state with the restored user data
@@ -186,6 +195,121 @@ class AuthNotifier extends StateNotifier<AuthState> {
     print('Access token from tryAutoLogin: ${state.data?.accessToken}');
 
     return true;
+  }
+
+  Future<int> checkmobileno(
+    WidgetRef ref, {
+    required String mobileno,
+  }) async {
+    print("Login API call started for user: $mobileno");
+
+    // Start loading indicator
+    var loader = ref.read(loadingProvider.notifier);
+    loader.state = true;
+
+    // Define the URL for the login API
+    final url = '${EliteCleanApi().baseUrl}${EliteCleanApi().login}/$mobileno';
+
+    // Fetch shared preferences instance to store user data
+    final prefs = await SharedPreferences.getInstance();
+    int statusCode = 0;
+    try {
+      // Prepare headers and body
+
+      // Print the Content-Type header before making the API call
+
+      // Make the POST request to the login API with username and password
+      var response = await http.get(
+        Uri.parse(url),
+      );
+      statusCode = response.statusCode;
+      // Parse the response body
+      var responseData = json.decode(response.body);
+      print('Login API response: $responseData');
+      List<String> messages = [];
+      if (responseData['messages'] != null &&
+          responseData['messages'] is List) {
+        // Convert List<dynamic> to List<String>
+        messages = List<String>.from(
+            responseData['messages'].map((item) => item.toString()));
+      } else {
+        // Handle cases where messages is missing or not in the expected format
+        messages = ["An unexpected error occurred."];
+      }
+
+      // Handle different status codes
+      switch (response.statusCode) {
+        case 401:
+          print("mobile no does not exists");
+          loader.state = false;
+          // Optionally, update state with an error message
+          state = state.copyWith(messages: messages);
+          break;
+
+        case 201:
+          print("Login success - Access and refresh tokens received");
+          state = AuthState.fromJson(responseData);
+
+          final userData = json.encode({
+            'username': state.data?.username,
+            'access_token': state.data?.accessToken,
+            'accessTokenExpiry': state.data?.accessTokenExpiresAt,
+            'refresh_token': state.data?.refreshToken,
+            'refreshTokenExpiry': state.data?.refreshToken,
+            'userId': state.data?.userId,
+            'countryname': state.data?.countryname,
+            'state': state.data?.state,
+            'city': state.data?.city,
+            'address': state.data?.address,
+            'profile_pic': state.data?.profilePic,
+            'use_role': state.data?.useRole,
+            'id_front': state.data?.idFront,
+            'id_back': state.data?.idBack,
+            'id_card': state.data?.idCard,
+            'bankaccountno': state.data?.bankaccountno,
+            'bankname': state.data?.bankname,
+            'ifsccode': state.data?.ifsccode,
+            'latitude': state.data?.latitude,
+            'longitude': state.data?.longitude,
+            'radius': state.data?.radius,
+          });
+          // Update state and save to SharedPreferences
+          print("user data : ${state.data!.accessToken}");
+          await prefs.setString('userData', userData);
+          loader.state = false;
+
+          break;
+
+        default:
+          print("Unhandled status code: ${response.statusCode}");
+          loader.state = false;
+          // Optionally, update state with an error message
+          state = state.copyWith(
+            messages: ["An unexpected error occurred. Please try again."],
+          );
+          break;
+      }
+    } on FormatException catch (formatException) {
+      print('Format Exception: ${formatException.message}');
+      print('Invalid response format.');
+      state = state.copyWith(
+        messages: ["Invalid response from server."],
+      );
+    } on HttpException catch (httpException) {
+      print('HTTP Exception: ${httpException.message}');
+      state = state.copyWith(
+        messages: ["Network error occurred."],
+      );
+    } catch (e, stackTrace) {
+      print('General Exception: ${e.toString()}');
+      print('Stack Trace: $stackTrace');
+      state = state.copyWith(
+        messages: ["An error occurred. Please try again."],
+      );
+    } finally {
+      loader.state = false;
+    }
+    return statusCode;
   }
 }
 
