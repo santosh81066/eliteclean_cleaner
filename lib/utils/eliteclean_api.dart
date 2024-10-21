@@ -1,7 +1,7 @@
 class EliteCleanApi {
   // final String baseUrl = "http://68.178.165.167:3000/";
   final String baseUrl = "http://www.gocodecreations.com/";
-  final String login = "login";
+  final String login = "cleanerlogin";
   final String register = 'register';
   final String voiceCallingtToken = "voice_calling_token";
   final String getcategory = 'insertcategory';

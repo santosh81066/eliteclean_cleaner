@@ -1,10 +1,9 @@
-import 'package:eliteclean_cleaner/providers/auth.dart';
-import 'package:eliteclean_cleaner/providers/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../providers/navigation_provider.dart';
+import '../providers/auth.dart';
+import '../providers/loader.dart';
 
 class Verify extends StatefulWidget {
   const Verify({super.key});
@@ -208,6 +207,47 @@ class _VerifyState extends State<Verify> {
                       return SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
+                          // onPressed: loader == true
+                          //     ? null // Disable button if loader is true (during API call)
+                          //     : () async {
+                          //         // Collect all entered OTP digits
+                          //         String smsCode = _controller1.text +
+                          //             _controller2.text +
+                          //             _controller3.text +
+                          //             _controller4.text +
+                          //             _controller5.text +
+                          //             _controller6.text;
+                          //
+                          //         print("button pressed");
+                          //
+                          //         if (smsCode.length == 6) {
+                          //           try {
+                          //             // Attempt verification
+                          //             await verify.signInWithPhoneNumber(
+                          //                 smsCode, context, ref, phoneNumber);
+                          //
+                          //             // If verification is successful, navigate to the Home screen
+                          //             Navigator.pushReplacementNamed(
+                          //                 context, '/home');
+                          //           } catch (error) {
+                          //             // Handle verification error (e.g., show a Snackbar)
+                          //             ScaffoldMessenger.of(context)
+                          //                 .showSnackBar(
+                          //               SnackBar(
+                          //                   content: Text(
+                          //                       'Verification failed: $error')),
+                          //             );
+                          //           }
+                          //         } else {
+                          //           // Show error message to user if OTP is incomplete
+                          //           ScaffoldMessenger.of(context).showSnackBar(
+                          //             const SnackBar(
+                          //                 content: Text(
+                          //                     'Please enter the full 6-digit code.')),
+                          //           );
+                          //         }
+                          //       },
+
                           onPressed: loader == true
                               ? null
                               : () {

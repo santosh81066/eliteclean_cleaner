@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../model/authstate.dart';
 import '../utils/eliteclean_api.dart';
 import 'loader.dart';
@@ -208,7 +209,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     loader.state = true;
 
     // Define the URL for the login API
-    final url = '${EliteCleanApi().baseUrl}${EliteCleanApi().login}/$mobileno';
+    final url = '${EliteCleanApi().baseUrl}${EliteCleanApi().login}';
 
     // Fetch shared preferences instance to store user data
     final prefs = await SharedPreferences.getInstance();
@@ -219,8 +220,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Print the Content-Type header before making the API call
 
       // Make the POST request to the login API with username and password
-      var response = await http.get(
+      var response = await http.post(
         Uri.parse(url),
+        body: {"mobileno": "9989297020"},
       );
       statusCode = response.statusCode;
       // Parse the response body
@@ -248,34 +250,62 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
         case 201:
           print("Login success - Access and refresh tokens received");
-          state = AuthState.fromJson(responseData);
+          final authState = AuthState.fromJson(responseData);
+          final newAccessToken = authState.data?.accessToken;
+          final newAccessTokenExpiryDate =
+              authState.data?.accessTokenExpiresAt != null
+                  ? DateTime.fromMillisecondsSinceEpoch(
+                      authState.data!.accessTokenExpiresAt!)
+                  : null;
+          final newRefreshToken = authState.data?.refreshToken;
+          final newRefreshTokenExpiryDate =
+              authState.data?.refreshTokenExpiresAt != null
+                  ? DateTime.fromMillisecondsSinceEpoch(
+                      authState.data!.refreshTokenExpiresAt!)
+                  : null;
+
+          // Update state and save to SharedPreferences
+          state = state.copyWith(
+            data: authState.data?.copyWith(
+              accessToken: newAccessToken,
+              accessTokenExpiresAt:
+                  newAccessTokenExpiryDate?.millisecondsSinceEpoch,
+              refreshToken: newRefreshToken,
+              refreshTokenExpiresAt:
+                  newRefreshTokenExpiryDate?.millisecondsSinceEpoch,
+            ),
+          );
 
           final userData = json.encode({
-            'username': state.data?.username,
-            'access_token': state.data?.accessToken,
-            'accessTokenExpiry': state.data?.accessTokenExpiresAt,
-            'refresh_token': state.data?.refreshToken,
-            'refreshTokenExpiry': state.data?.refreshToken,
-            'userId': state.data?.userId,
-            'countryname': state.data?.countryname,
-            'state': state.data?.state,
-            'city': state.data?.city,
-            'address': state.data?.address,
-            'profile_pic': state.data?.profilePic,
-            'use_role': state.data?.useRole,
-            'id_front': state.data?.idFront,
-            'id_back': state.data?.idBack,
-            'id_card': state.data?.idCard,
-            'bankaccountno': state.data?.bankaccountno,
-            'bankname': state.data?.bankname,
-            'ifsccode': state.data?.ifsccode,
-            'latitude': state.data?.latitude,
-            'longitude': state.data?.longitude,
-            'radius': state.data?.radius,
+            'username': authState.data?.username,
+            'access_token': newAccessToken,
+            'accessTokenExpiry': newAccessTokenExpiryDate?.toIso8601String(),
+            'refresh_token': newRefreshToken,
+            'refreshTokenExpiry': newRefreshTokenExpiryDate?.toIso8601String(),
+            'userId': authState.data?.userId,
+            'countryname': authState.data?.countryname,
+            'state': authState.data?.state,
+            'city': authState.data?.city,
+            'address': authState.data?.address,
+            'profile_pic': authState.data?.profilePic,
+            'use_role': authState.data?.useRole,
+            'id_front': authState.data?.idFront,
+            'id_back': authState.data?.idBack,
+            'id_card': authState.data?.idCard,
+            'bankaccountno': authState.data?.bankaccountno,
+            'bankname': authState.data?.bankname,
+            'ifsccode': authState.data?.ifsccode,
+            'latitude': authState.data?.latitude,
+            'longitude': authState.data?.longitude,
+            'radius': authState.data?.radius,
           });
-          // Update state and save to SharedPreferences
-          print("user data : ${state.data!.accessToken}");
+
+          loader.state = false;
           await prefs.setString('userData', userData);
+          print(
+              "SharedPreferences updated with new token data: ${prefs.getString('userData')}");
+          print(
+              "state updated with new token data: ${state.data?.accessToken}");
           loader.state = false;
 
           break;
