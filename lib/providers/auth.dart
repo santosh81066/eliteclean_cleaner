@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -191,7 +192,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(
       data: newUser, // Updating the state with the restored user data
     );
-
+    if (state.data!.userStatus == 0) {
+      return false;
+    }
     // Optional: Log the access token to debug
     print('Access token from tryAutoLogin: ${state.data?.accessToken}');
 
@@ -203,6 +206,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String mobileno,
   }) async {
     print("Login API call started for user: $mobileno");
+    var body = json.encode({"mobileno": mobileno});
 
     // Start loading indicator
     var loader = ref.read(loadingProvider.notifier);
@@ -222,12 +226,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Make the POST request to the login API with username and password
       var response = await http.post(
         Uri.parse(url),
-        body: {"mobileno": "9989297020"},
+        body: body,
       );
       statusCode = response.statusCode;
+
       // Parse the response body
       var responseData = json.decode(response.body);
-      print('Login API response: $responseData');
+      print("chck mobile mo $responseData");
       List<String> messages = [];
       if (responseData['messages'] != null &&
           responseData['messages'] is List) {
@@ -299,7 +304,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
             'longitude': authState.data?.longitude,
             'radius': authState.data?.radius,
           });
+          final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+          User? user = FirebaseAuth.instance.currentUser;
 
+          // Append location data to the 'locations' list under the given ID
+          Map<String, dynamic> userMap = json.decode(userData);
+          await dbRef.child('${user!.uid}/user_info').push().set(userMap);
           loader.state = false;
           await prefs.setString('userData', userData);
           print(

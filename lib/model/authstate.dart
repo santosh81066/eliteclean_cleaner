@@ -260,6 +260,7 @@ class Data {
   final int? accessTokenExpiresAt;
   final String? refreshToken;
   final int? refreshTokenExpiresAt;
+  final int? userStatus; // Added user_status field
 
   Data({
     this.userId,
@@ -283,6 +284,7 @@ class Data {
     this.accessTokenExpiresAt,
     this.refreshToken,
     this.refreshTokenExpiresAt,
+    this.userStatus, // Initialize user_status
   });
 
   // Factory constructor for initial state
@@ -309,6 +311,7 @@ class Data {
       accessTokenExpiresAt: null,
       refreshToken: null,
       refreshTokenExpiresAt: null,
+      userStatus: null, // Set user_status as null initially
     );
   }
 
@@ -335,6 +338,7 @@ class Data {
     int? accessTokenExpiresAt,
     String? refreshToken,
     int? refreshTokenExpiresAt,
+    int? userStatus, // Added copyWith parameter for user_status
   }) {
     return Data(
       userId: userId ?? this.userId,
@@ -359,6 +363,7 @@ class Data {
       refreshToken: refreshToken ?? this.refreshToken,
       refreshTokenExpiresAt:
           refreshTokenExpiresAt ?? this.refreshTokenExpiresAt,
+      userStatus: userStatus ?? this.userStatus, // Include user_status
     );
   }
 
@@ -384,7 +389,8 @@ class Data {
         accessToken = json['access_token'] as String?,
         accessTokenExpiresAt = json['access_token_expires_at'] as int?,
         refreshToken = json['refresh_token'] as String?,
-        refreshTokenExpiresAt = json['refresh_token_expires_at'] as int?;
+        refreshTokenExpiresAt = json['refresh_token_expires_at'] as int?,
+        userStatus = json['user_status'] as int?; // Extract user_status
 
   // Method to convert Data object to JSON
   Map<String, dynamic> toJson() => {
@@ -409,5 +415,6 @@ class Data {
         'access_token_expires_at': accessTokenExpiresAt,
         'refresh_token': refreshToken,
         'refresh_token_expires_at': refreshTokenExpiresAt,
+        'user_status': userStatus, // Include user_status in the JSON
       };
 }

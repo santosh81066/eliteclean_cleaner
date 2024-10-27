@@ -46,11 +46,14 @@ class MyApp extends StatelessWidget {
         '/': (context) {
           return Consumer(
             builder: (context, ref, child) {
+              print("build main.dart");
               final authState = ref.watch(authProvider);
 
               // Check if the user has a valid refresh token
               if (authState.data?.refreshToken != null &&
-                  authState.data!.refreshToken!.isNotEmpty) {
+                  authState.data!.userStatus == 1 &&
+                  (authState.data!.useRole == 's' ||
+                      authState.data!.useRole == 'c')) {
                 print('Refresh token exists: ${authState.data?.refreshToken}');
                 return Home(); // User is authenticated, redirect to Home
               } else {
