@@ -144,16 +144,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       print('tryAutoLogin is false');
       return false;
     }
-
-    print("From tryAutoLogin: SharedPreferences contains user data.");
+    print("All keys in SharedPreferences: ${prefs.getKeys()}");
+    for (String key in prefs.getKeys()) {
+      print("Key: $key, Value: ${prefs.get(key)}");
+    }
 
     // Extract user data from shared preferences
     final extractedData =
         json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
+    print("User Data (parsed JSON): $extractedData");
+    print(
+        "From tryAutoLogin: SharedPreferences contains user data. $extractedData");
 
-    // Extract individual data fields from the saved data
+    // Correctly parse and assign data fields
     final newUser = Data(
-      userId: extractedData['userId'] ?? '', // Provide default value if null
+      userStatus: extractedData['userstatus'],
+      userId: extractedData['userId'] ?? 0, // Default to 0 if null
       username: extractedData['username'] ?? '', // Default to empty string
       countryname: extractedData['countryname'] ?? '',
       state: extractedData['state'] ?? '',
@@ -168,37 +174,43 @@ class AuthNotifier extends StateNotifier<AuthState> {
       bankname: extractedData['bankname'] ?? '',
       ifsccode: extractedData['ifsccode'] ?? '',
       latitude: extractedData['latitude'] != null
-          ? double.tryParse(extractedData['latitude']) ?? 0.0
-          : 0.0, // Default to 0.0 if null or invalid
+          ? double.tryParse(extractedData['latitude'].toString()) ?? 0.0
+          : 0.0,
       longitude: extractedData['longitude'] != null
-          ? double.tryParse(extractedData['longitude']) ?? 0.0
-          : 0.0, // Default to 0.0 if null or invalid
+          ? double.tryParse(extractedData['longitude'].toString()) ?? 0.0
+          : 0.0,
       radius: extractedData['radius'] != null
-          ? double.tryParse(extractedData['radius']) ?? 0.0
-          : 0.0, // Default to 0.0 if null or invalid
+          ? double.tryParse(extractedData['radius'].toString()) ?? 0.0
+          : 0.0,
       accessToken: extractedData['access_token'] ?? '',
       accessTokenExpiresAt: extractedData['accessTokenExpiry'] != null
-          ? int.tryParse(extractedData['accessTokenExpiry']
-              .toString()) // Ensure it's a valid timestamp
-          : null, // Default to null if the expiry is invalid or missing
+          ? DateTime.tryParse(extractedData['accessTokenExpiry'])
+              ?.millisecondsSinceEpoch
+          : null,
       refreshToken: extractedData['refresh_token'] ?? '',
       refreshTokenExpiresAt: extractedData['refreshTokenExpiry'] != null
-          ? int.tryParse(extractedData['refreshTokenExpiry']
-              .toString()) // Ensure it's a valid timestamp
-          : null, // Default to null if the expiry is invalid or missing
+          ? DateTime.tryParse(extractedData['refreshTokenExpiry'])
+              ?.millisecondsSinceEpoch
+          : null,
     );
-    print("tryautologin user $extractedData");
-    // Update the AuthState with new data using copyWith
-    state = state.copyWith(
-      data: newUser, // Updating the state with the restored user data
-    );
+
+    // Update the AuthState with new data
+    state = state.copyWith(data: newUser);
+    print('User status: ${state.data!.userStatus}');
+    print('Access token: ${state.data?.accessToken}');
+    print('Refresh token: ${state.data?.refreshToken}');
+
+    // Check if the userStatus is valid
     if (state.data!.userStatus == 0) {
       return false;
     }
-    // Optional: Log the access token to debug
-    print('Access token from tryAutoLogin: ${state.data?.accessToken}');
 
-    return true;
+    // Debug: Log the access token
+    print('Refresh token from tryAutoLogin: ${state.data?.refreshToken}');
+
+    // Return true if access token is not empty
+    return state.data?.accessToken != null &&
+        state.data!.accessToken!.isNotEmpty;
   }
 
   Future<int> checkmobileno(
@@ -282,6 +294,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           );
 
           final userData = json.encode({
+            'userstatus': authState.data?.userStatus,
             'username': authState.data?.username,
             'access_token': newAccessToken,
             'accessTokenExpiry': newAccessTokenExpiryDate?.toIso8601String(),
@@ -314,8 +327,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           await prefs.setString('userData', userData);
           print(
               "SharedPreferences updated with new token data: ${prefs.getString('userData')}");
-          print(
-              "state updated with new token data: ${state.data?.accessToken}");
+          print("state updated with new token data: ${state.data?.userStatus}");
           loader.state = false;
 
           break;

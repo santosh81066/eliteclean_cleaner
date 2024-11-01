@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TopSection extends StatelessWidget {
-  const TopSection({
+class TopSectionCleaner extends StatelessWidget {
+  const TopSectionCleaner({
     super.key,
     required this.screenWidth,
     required this.screenHeight,

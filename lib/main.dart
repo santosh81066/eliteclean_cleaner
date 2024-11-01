@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 
               // Attempt auto-login if refresh token is not in state
               return FutureBuilder(
-                future: ref.watch(authProvider.notifier).tryAutoLogin(),
+                future: ref.read(authProvider.notifier).tryAutoLogin(),
                 builder: (context, snapshot) {
                   print(
                       'Token after auto-login attempt: ${authState.data?.accessToken}');
