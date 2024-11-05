@@ -10,6 +10,7 @@ import 'package:eliteclean_cleaner/supervisor_screens/allcleaners_supervisor.dar
 import 'package:eliteclean_cleaner/supervisor_screens/holiday_applications.dart';
 import 'package:eliteclean_cleaner/supervisor_screens/home_supervisor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,7 +20,10 @@ import 'providers/auth.dart';
 void main() async {
   // Ensure that widget binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
-
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
