@@ -78,6 +78,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           user.getIdToken().then((ftoken) async {
             await prefs.setString('firebaseToken', ftoken!);
           });
+          Navigator.of(context).pushReplacementNamed('/home');
           // Add any additional logic needed after successful login here
         }
       });

@@ -4,6 +4,7 @@ import 'package:eliteclean_cleaner/screens/home_cleaner.dart';
 import 'package:eliteclean_cleaner/screens/loginpage.dart';
 import 'package:eliteclean_cleaner/screens/otpverify.dart';
 import 'package:eliteclean_cleaner/screens/payment_info.dart';
+import 'package:eliteclean_cleaner/screens/pending_bookings.dart';
 import 'package:eliteclean_cleaner/screens/slashscreen.dart';
 import 'package:eliteclean_cleaner/screens/userprofile.dart';
 import 'package:eliteclean_cleaner/supervisor_screens/allcleaners_supervisor.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         }, // Splashscreen as the initial screen
         '/login': (context) => const Login(),
         '/verify': (context) => const Verify(),
+        '/pendingbookings': (context) => const PendingBookings(),
         '/register': (context) => const CleanerRegistration(),
         '/userprofile': (context) => const UserProfile(),
         '/paymentinfo': (context) => const PaymentInfo(),

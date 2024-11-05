@@ -1,8 +1,11 @@
 import 'package:eliteclean_cleaner/providers/auth.dart';
 import 'package:eliteclean_cleaner/widgets/topSectionSupervisor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:intl/intl.dart';
+import '../model/bookings_data.dart';
 import '../widgets/topSectionCleaner.dart';
 import 'bookings.dart';
 
@@ -13,7 +16,44 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
+  List<Booking> _bookings = [];
+  bool _isLoading = true;
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBookings();
+  }
+
+  Future<void> _fetchBookings() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    try {
+      final snapshot = await _dbRef.child('${user!.uid}/bookings').get();
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+        setState(() {
+          _bookings = data.entries.map((entry) {
+            final value = entry.value as Map<dynamic, dynamic>;
+            return Booking.fromMap(entry.key, value);
+          }).toList();
+          _isLoading = false;
+        });
+      } else {
+        print("No bookings found in Firebase.");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Error fetching bookings: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -25,6 +65,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final today = DateTime.now();
+    final todayDateString = DateFormat('yyyy-MM-dd').format(today);
+
+    // Filter bookings with today's date in the `time` field
+    final todayBookings = _bookings.where((booking) {
+      final bookingDate = DateTime.tryParse(booking.time);
+      return bookingDate != null &&
+          DateFormat('yyyy-MM-dd').format(bookingDate) == todayDateString;
+    }).toList();
 
     final List<Widget> pages = [
       // Home Page
@@ -87,52 +136,269 @@ class _HomeState extends State<Home> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(height: 100),
-                            Container(
-                              width: screenWidth * 0.80,
-                              padding: const EdgeInsets.all(20),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFF5F5F5),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(2),
-                                  topRight: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25),
-                                  bottomRight: Radius.circular(25),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Work for today will appear here',
-                                    style: TextStyle(
-                                      color: Color(0xFF808080),
-                                      fontSize: 14,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Image.asset(
-                                    'assets/images/emptyservice.png', // Replace with your image asset path
-                                    height: 80,
-                                    width: 80,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  const Text(
-                                    'No work for today yet...',
-                                    style: TextStyle(
-                                      color: Color(0xFF808080),
-                                      fontSize: 12,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            const SizedBox(height: 20),
+                            _isLoading
+                                ? Center(child: CircularProgressIndicator())
+                                : todayBookings.isEmpty
+                                    ? Image(
+                                        image: AssetImage(
+                                            'assets/images/nobookingpic.png'))
+                                    : SizedBox(
+                                        height: 400,
+                                        child: ListView.builder(
+                                          itemCount: todayBookings.length,
+                                          itemBuilder: (context, index) {
+                                            final booking =
+                                                todayBookings[index];
+                                            return Card(
+                                              elevation: 0.25,
+                                              color: Color(0xfff5f5f5),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(2),
+                                                    topRight:
+                                                        Radius.circular(25),
+                                                    bottomLeft:
+                                                        Radius.circular(25),
+                                                    bottomRight:
+                                                        Radius.circular(25),
+                                                  ),
+                                                  side: BorderSide(
+                                                      color: Color(0x26000000),
+                                                      width: 1)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 16,
+                                                        horizontal: 20),
+                                                child: ListTile(
+                                                  // title: Text(booking.package),
+                                                  subtitle: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Address : ',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${booking.address}',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          height: screenHeight *
+                                                              0.01),
+                                                      Text(
+                                                        'Status: ',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${booking.bookingStatus}',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          height: screenHeight *
+                                                              0.01),
+                                                      // Text(
+                                                      //     'Creator ID: ${booking.creatorId}'),
+                                                      Text(
+                                                        'Price: ',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${booking.price}',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          height: screenHeight *
+                                                              0.01),
+                                                      // Text(
+                                                      //     'Latitude: ${booking.latitude}'),
+                                                      // Text(
+                                                      //     'Longitude: ${booking.longitude}'),
+                                                      Text(
+                                                        'Time: ',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${booking.time}',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                             const SizedBox(height: 30),
                           ],
                         ),
+
+                        //     Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     const SizedBox(height: 10),
+                        //     const Text(
+                        //       "Today's work",
+                        //       style: TextStyle(
+                        //         color: Color(0xFF1E116B),
+                        //         fontSize: 20,
+                        //         fontFamily: 'Poppins',
+                        //         fontWeight: FontWeight.w600,
+                        //       ),
+                        //     ),
+                        //     _isLoading
+                        //         ? Center(child: CircularProgressIndicator())
+                        //         : _bookings.isEmpty
+                        //             ? Image(
+                        //                 image: AssetImage(
+                        //                     'assets/images/nobookingpic.png'))
+                        //             : SizedBox(
+                        //                 height:
+                        //                     400, // Specify a fixed height or use `Expanded`
+                        //                 child: ListView.builder(
+                        //                   itemCount: _bookings.length,
+                        //                   itemBuilder: (context, index) {
+                        //                     final booking = _bookings[index];
+                        //                     return Card(
+                        //                       elevation: 0.25,
+                        //                       color: Color(0xfff5f5f5),
+                        //                       shape: RoundedRectangleBorder(
+                        //                           borderRadius:
+                        //                               BorderRadius.only(
+                        //                             topLeft: Radius.circular(2),
+                        //                             topRight:
+                        //                                 Radius.circular(25),
+                        //                             bottomLeft:
+                        //                                 Radius.circular(25),
+                        //                             bottomRight:
+                        //                                 Radius.circular(25),
+                        //                           ),
+                        //                           side: BorderSide(
+                        //                               color: Color(0x26000000),
+                        //                               width: 1)),
+                        //                       child: Padding(
+                        //                         padding:
+                        //                             const EdgeInsets.symmetric(
+                        //                                 vertical: 16,
+                        //                                 horizontal: 20),
+                        //                         child: ListTile(
+                        //                           // title: Text(booking.package),
+                        //                           subtitle: Column(
+                        //                             crossAxisAlignment:
+                        //                                 CrossAxisAlignment
+                        //                                     .start,
+                        //                             children: [
+                        //                               Text(
+                        //                                 'Address : ',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                   fontWeight:
+                        //                                       FontWeight.bold,
+                        //                                 ),
+                        //                               ),
+                        //                               Text(
+                        //                                 '${booking.address}',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                 ),
+                        //                               ),
+                        //                               SizedBox(
+                        //                                   height: screenHeight *
+                        //                                       0.01),
+                        //                               Text(
+                        //                                 'Status: ',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                   fontWeight:
+                        //                                       FontWeight.bold,
+                        //                                 ),
+                        //                               ),
+                        //                               Text(
+                        //                                 '${booking.bookingStatus}',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                 ),
+                        //                               ),
+                        //                               SizedBox(
+                        //                                   height: screenHeight *
+                        //                                       0.01),
+                        //                               // Text(
+                        //                               //     'Creator ID: ${booking.creatorId}'),
+                        //                               Text(
+                        //                                 'Price: ',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                   fontWeight:
+                        //                                       FontWeight.bold,
+                        //                                 ),
+                        //                               ),
+                        //                               Text(
+                        //                                 '${booking.price}',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                 ),
+                        //                               ),
+                        //                               SizedBox(
+                        //                                   height: screenHeight *
+                        //                                       0.01),
+                        //                               // Text(
+                        //                               //     'Latitude: ${booking.latitude}'),
+                        //                               // Text(
+                        //                               //     'Longitude: ${booking.longitude}'),
+                        //                               Text(
+                        //                                 'Time: ',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                   fontWeight:
+                        //                                       FontWeight.bold,
+                        //                                 ),
+                        //                               ),
+                        //                               Text(
+                        //                                 '${booking.time}',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 16,
+                        //                                 ),
+                        //                               ),
+                        //                             ],
+                        //                           ),
+                        //                         ),
+                        //                       ),
+                        //                     );
+                        //                   },
+                        //                 ),
+                        //               ),
+                        //     const SizedBox(height: 30),
+                        //   ],
+                        // ),
                       ),
                     ),
                   ],

@@ -88,7 +88,7 @@ class BookingScreen extends StatelessWidget {
                               switch (result) {
                                 case 'Pending Bookings':
                                   Navigator.of(context)
-                                      .pushNamed('/pendingbooking');
+                                      .pushNamed('/pendingbookings');
                                   // Handle edit action
                                   break;
                               }

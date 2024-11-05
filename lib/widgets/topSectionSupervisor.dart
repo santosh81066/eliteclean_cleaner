@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TopSection extends StatelessWidget {
+import '../providers/auth.dart';
+
+class TopSection extends ConsumerWidget {
   const TopSection({
     super.key,
     required this.screenWidth,
@@ -11,7 +14,7 @@ class TopSection extends StatelessWidget {
   final double screenHeight;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
       children: [
         // Purple header section
@@ -150,6 +153,9 @@ class TopSection extends StatelessWidget {
                     case 'Holiday applications':
                       Navigator.of(context).pushNamed('/holidayapps');
                       break;
+                    case 'Logout':
+                      ref.read(authProvider.notifier).logout();
+                      break;
                   }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -164,6 +170,13 @@ class TopSection extends StatelessWidget {
                   const PopupMenuItem<String>(
                     value: 'Holiday applications',
                     child: Text('Holiday applications'),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'Logout',
+                    child: const Text('Logout'),
+                    // onTap: () {
+                    //   ref.read(authProvider.notifier).logout();
+                    // },
                   ),
                 ],
               ),
