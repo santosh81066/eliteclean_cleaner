@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 import '../model/bookings_data.dart';
+import 'package:intl/intl.dart';
 
 class PendingBookings extends StatefulWidget {
   const PendingBookings({super.key});
@@ -20,12 +20,13 @@ class _PendingBookingsState extends State<PendingBookings> {
 
   String? selectedValue;
   List<String> cleanerIds = []; // List to hold user IDs of cleaners
+  Map<int, String?> selectedValuesMap = {};
 
   @override
   void initState() {
     super.initState();
     _fetchBookings();
-    _fetchCleaners(); // Fetch cleaners with user_role "c"
+    _fetchCleaners();
   }
 
   Future<void> _fetchBookings() async {
@@ -56,25 +57,64 @@ class _PendingBookingsState extends State<PendingBookings> {
 
   Future<void> _fetchCleaners() async {
     try {
-      final snapshot = await _dbRef.child('${user!.uid}/user_info/').get();
+      final snapshot = await _dbRef.get();
       if (snapshot.exists) {
         final data = snapshot.value as Map<dynamic, dynamic>;
         final List<String> ids = [];
 
-        data.forEach((key, value) {
-          final userInfo = value as Map<dynamic, dynamic>;
-          if (userInfo['user_role'] == 'c') {
-            ids.add(key); // Add userId to the list if user_role is "c"
+        data.forEach((userId, userData) {
+          final userInfo = userData['user_info'] as Map<dynamic, dynamic>?;
+          if (userInfo != null) {
+            bool hasCleanerRole = userInfo.values.any((value) {
+              final userEntry = value as Map<dynamic, dynamic>;
+              return userEntry['use_role'] == 'c';
+            });
+
+            if (hasCleanerRole) {
+              ids.add(userId);
+            }
           }
         });
 
         setState(() {
-          cleanerIds = ids; // Update the cleaner IDs list
+          cleanerIds = ids;
         });
+
+        print("Cleaner IDs: $cleanerIds");
+      } else {
+        print("No data found in the root.");
       }
     } catch (e) {
       print("Error fetching cleaners: $e");
     }
+  }
+
+  Future<void> assignBookingToCleaner(
+      String bookingKey, Map<String, dynamic> bookingDetails) async {
+    if (selectedValue == null) {
+      print("No cleaner selected");
+      return;
+    }
+
+    try {
+      await _dbRef
+          .child('$selectedValue/bookings/$bookingKey')
+          .set(bookingDetails);
+      print("Booking assigned to cleaner $selectedValue");
+    } catch (e) {
+      print("Error assigning booking: $e");
+    }
+  }
+
+  bool _isBookingExpired(String bookingTime) {
+    final currentTime = DateTime.now();
+    final dateFormat = DateFormat(
+        "MMM d, yyyy - h:mm a"); // Match format "Nov 1, 2024 - 6:12 AM"
+    final bookingDateTime = dateFormat.parse(bookingTime);
+
+    // Check if the current time is within one hour of the booking time
+    final oneHourBeforeBooking = bookingDateTime.subtract(Duration(hours: 1));
+    return currentTime.isAfter(oneHourBeforeBooking);
   }
 
   @override
@@ -89,7 +129,7 @@ class _PendingBookingsState extends State<PendingBookings> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 0),
             _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _bookings.isEmpty
@@ -101,7 +141,9 @@ class _PendingBookingsState extends State<PendingBookings> {
                           itemCount: _bookings.length,
                           itemBuilder: (context, index) {
                             final booking = _bookings[index];
+                            final isExpired = _isBookingExpired(booking.time);
                             return Card(
+                              margin: const EdgeInsets.only(bottom: 25),
                               elevation: 0.25,
                               color: const Color(0xfff5f5f5),
                               shape: const RoundedRectangleBorder(
@@ -186,20 +228,52 @@ class _PendingBookingsState extends State<PendingBookings> {
                                             style: TextStyle(fontSize: 18),
                                           ),
                                           DropdownButton<String>(
-                                            elevation: 0,
-                                            value: selectedValue,
-                                            hint: const Text('Select Cleaner'),
+                                            value: selectedValuesMap[index],
+                                            hint: Text(
+                                                _isBookingExpired(booking.time)
+                                                    ? 'Expired'
+                                                    : 'Select'),
                                             items: cleanerIds.map((String id) {
                                               return DropdownMenuItem<String>(
                                                 value: id,
                                                 child: Text(id),
                                               );
                                             }).toList(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                selectedValue = newValue;
-                                              });
-                                            },
+                                            onChanged: _isBookingExpired(
+                                                    booking.time)
+                                                ? null // Disable dropdown if booking is expired
+                                                : (String? newValue) {
+                                                    setState(() {
+                                                      selectedValuesMap[index] =
+                                                          newValue;
+                                                    });
+                                                  },
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: isExpired
+                                                ? null
+                                                : () {
+                                                    if (selectedValuesMap[
+                                                            index] !=
+                                                        null) {
+                                                      final bookingDetails = {
+                                                        'address':
+                                                            booking.address,
+                                                        'bookingStatus': booking
+                                                            .bookingStatus,
+                                                        'price': booking.price,
+                                                        'time': booking.time,
+                                                      };
+
+                                                      assignBookingToCleaner(
+                                                          booking.id,
+                                                          bookingDetails);
+                                                    } else {
+                                                      print(
+                                                          "Please select a cleaner");
+                                                    }
+                                                  },
+                                            child: const Text('Assign'),
                                           ),
                                         ],
                                       ),
